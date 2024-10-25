@@ -44,7 +44,7 @@
     margin-inline: var(--avatar-size) 0;
   }
 
-  .comment:has(+ .rollup) & {
+  .comment:has(+ .event-summary) & {
     padding-block-end: calc(var(--comment-padding-block) * 1.5);
   }
 }
@@ -73,7 +73,7 @@
   opacity: 0.5;
 }
 
-.rollup {
+.event-summary {
   font-weight: 600;
   min-height: 2.33em;
   margin-block: calc(var(--comment-padding-block) * -1);
