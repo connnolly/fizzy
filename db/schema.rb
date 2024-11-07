@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_28_183212) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_05_224305) do
   create_table "accesses", force: :cascade do |t|
     t.integer "bucket_id", null: false
     t.integer "user_id", null: false
@@ -58,6 +58,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_28_183212) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "assignees_filters", id: false, force: :cascade do |t|
+    t.integer "filter_id", null: false
+    t.integer "assignee_id", null: false
+    t.index ["assignee_id"], name: "index_assignees_filters_on_assignee_id"
+    t.index ["filter_id"], name: "index_assignees_filters_on_filter_id"
+  end
+
   create_table "assignments", force: :cascade do |t|
     t.integer "assignee_id", null: false
     t.integer "bubble_id", null: false
@@ -82,16 +89,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_28_183212) do
     t.index ["stage_id"], name: "index_bubbles_on_stage_id"
   end
 
-  create_table "bucket_views", force: :cascade do |t|
-    t.integer "creator_id", null: false
-    t.integer "bucket_id", null: false
-    t.json "filters", default: {}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bucket_id", "creator_id", "filters"], name: "index_bucket_views_on_bucket_id_and_creator_id_and_filters", unique: true
-    t.index ["creator_id"], name: "index_bucket_views_on_creator_id"
-  end
-
   create_table "buckets", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "creator_id", null: false
@@ -100,6 +97,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_28_183212) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_buckets_on_account_id"
     t.index ["creator_id"], name: "index_buckets_on_creator_id"
+  end
+
+  create_table "buckets_filters", id: false, force: :cascade do |t|
+    t.integer "filter_id", null: false
+    t.integer "bucket_id", null: false
+    t.index ["bucket_id"], name: "index_buckets_filters_on_bucket_id"
+    t.index ["filter_id"], name: "index_buckets_filters_on_filter_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -123,6 +127,22 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_28_183212) do
     t.integer "summary_id", null: false
     t.index ["creator_id"], name: "index_events_on_creator_id"
     t.index ["summary_id", "action"], name: "index_events_on_summary_id_and_action"
+  end
+
+  create_table "filters", force: :cascade do |t|
+    t.integer "creator_id", null: false
+    t.json "params", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "fields", default: {}, null: false
+    t.index ["creator_id", "params"], name: "index_filters_on_creator_id_and_params", unique: true
+  end
+
+  create_table "filters_tags", id: false, force: :cascade do |t|
+    t.integer "filter_id", null: false
+    t.integer "tag_id", null: false
+    t.index ["filter_id"], name: "index_filters_tags_on_filter_id"
+    t.index ["tag_id"], name: "index_filters_tags_on_tag_id"
   end
 
   create_table "messages", force: :cascade do |t|

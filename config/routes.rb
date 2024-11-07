@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     route_for :bucket_bubble, bubble.bucket, bubble, options
   end
 
+  resources :bubbles
+
   resources :buckets do
     resources :bubbles do
       resources :assignments
@@ -28,12 +30,9 @@ Rails.application.routes.draw do
     end
 
     resources :tags, only: :index
-
-    scope module: :buckets do
-      resources :views
-    end
   end
 
+  resources :filters
   resource :first_run
   resource :session
 

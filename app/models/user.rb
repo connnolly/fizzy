@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  include Viewer
-
   belongs_to :account
 
   has_many :sessions, dependent: :destroy
@@ -8,7 +6,10 @@ class User < ApplicationRecord
 
   has_many :accesses, dependent: :destroy
   has_many :buckets, through: :accesses
-  has_many :bubbles, through: :buckets
+  has_many :accessible_bubbles, through: :buckets, source: :bubbles
+
+  has_many :filters, foreign_key: :creator_id, inverse_of: :creator, dependent: :destroy
+
   has_many :pops, dependent: :nullify
 
   has_many :assignments, foreign_key: :assignee_id, dependent: :destroy

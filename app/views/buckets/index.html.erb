@@ -1,4 +1,4 @@
-<% @page_title = "Buckets" %>
+<% @page_title = "Projects" %>
 
 <% content_for :header do %>
   <nav>
@@ -9,17 +9,12 @@
 
     <%= link_to new_bucket_path, class: "btn btn--plain flex-item-justify-end", style: "view-transition-name: new-bucket" do %>
       <%= image_tag "bubbles-add.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Add a new bucket</span>
+      <span class="for-screen-reader">Add a new project</span>
     <% end %>
   </nav>
 <% end %>
 
 <menu class="buckets margin-none unpad align-center justify-center flex flex-wrap gap">
-  <% @buckets.each do |bucket| %>
-    <% if bucket.is_a? Bucket %>
-      <%= render partial: "buckets/bucket", locals: { bucket: bucket } %>
-    <% elsif bucket.is_a? Bucket::View %>
-      <%= render partial: "buckets/view", locals: { view: bucket } %>
-    <% end %>
-  <% end %>
+  <%= render @filters %>
+  <%= render @buckets, cached: true %>
 </menu>

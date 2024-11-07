@@ -34,11 +34,42 @@ class BubbleTest < ActiveSupport::TestCase
 
   test "ordering by activity" do
     bubbles(:layout).update! boost_count: 1_000
-    assert_equal bubbles(:layout, :logo, :shipping, :text), Bubble.ordered_by_activity.to_a
+    assert_equal bubbles(:layout, :logo, :shipping, :text), Bubble.ordered_by_activity
   end
 
   test "ordering by comments" do
-    assert_equal bubbles(:logo, :layout, :shipping, :text), Bubble.ordered_by_comments.to_a
+    assert_equal bubbles(:logo, :layout, :shipping, :text), Bubble.ordered_by_comments
+  end
+
+  test "ordering by boosts" do
+    bubbles(:layout).update! boost_count: 1_000
+    assert_equal bubbles(:layout, :logo, :shipping, :text), Bubble.ordered_by_boosts
+  end
+
+  test "popped" do
+    assert_equal [ bubbles(:shipping) ], Bubble.popped
+  end
+
+  test "active" do
+    assert_equal bubbles(:logo, :layout, :text), Bubble.active
+  end
+
+  test "unassigned" do
+    assert_equal bubbles(:shipping, :text), Bubble.unassigned
+  end
+
+  test "assigned to" do
+    assert_equal bubbles(:logo, :layout), Bubble.assigned_to(users(:jz))
+  end
+
+  test "in bucket" do
+    new_bucket = accounts("37s").buckets.create! name: "New Bucket", creator: users(:david)
+    assert_equal bubbles(:logo, :shipping, :layout, :text), Bubble.in_bucket(buckets(:writebook))
+    assert_empty Bubble.in_bucket(new_bucket)
+  end
+
+  test "tagged with" do
+    assert_equal bubbles(:layout, :text), Bubble.tagged_with(tags(:mobile))
   end
 
   test "mentioning" do

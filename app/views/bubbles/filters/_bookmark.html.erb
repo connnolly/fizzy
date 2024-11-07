@@ -1,0 +1,34 @@
+<% if params[:filter_id] %>
+  <%= button_to filter_path(params[:filter_id]), method: :delete, class: "btn txt-small borderless" do %>
+    <%= image_tag "bookmark.svg", aria: { hidden: true }, size: 24 %>
+    <span class="for-screen-reader">Delete this filter</span>
+  <% end %>
+<% else %>
+  <%= form_with url: filters_path, method: :post do %>
+    <%= hidden_field_tag :indexed_by, params[:indexed_by] if params[:indexed_by].present? %>
+    <%= hidden_field_tag :assignments, params[:assignments] if params[:assignments].present? %>
+
+    <% if values = params[:bucket_ids].presence %>
+      <% values.each do |value| %>
+        <%= hidden_field_tag "bucket_ids[]", value, id: nil %>
+      <% end %>
+    <% end %>
+
+    <% if values = params[:tag_ids].presence %>
+      <% values.each do |value| %>
+        <%= hidden_field_tag "tag_ids[]", value, id: nil %>
+      <% end %>
+    <% end %>
+
+    <% if values = params[:assignee_ids].presence %>
+      <% values.each do |value| %>
+        <%= hidden_field_tag "assignee_ids[]", value, id: nil %>
+      <% end %>
+    <% end %>
+
+    <%= button_tag type: :submit, class: "btn txt-small borderless" do %>
+      <%= image_tag "bookmark-outline.svg", aria: { hidden: true }, size: 24 %>
+      <span class="for-screen-reader">Save this filter</span>
+    <% end %>
+  <% end %>
+<% end %>

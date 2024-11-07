@@ -1,0 +1,15 @@
+<div class="filter align-center gap-half" data-controller="dialog" data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside">
+  <button class="btn btn--plain filter__button" data-action="click->dialog#toggle" data-dialog-modal-value="true">
+    <%= buckets_filter_text filter %>
+  </button>
+
+  <dialog class="filter__popup panel fill-white shadow" data-dialog-target="dialog" data-turbo-temporary>
+    <menu class="filter__menu unpad margin-none">
+      <li><%= link_to "all projects", bubbles_path(filter.to_params.merge(bucket_ids: nil)), class: "filter__button" %></li>
+
+      <% Current.user.buckets.each do |bucket| %>
+        <li><%= link_to bucket.name, bubbles_path(filter.to_params.merge(bucket_ids: [ bucket.id ])), class: "filter__button" %></li>
+      <% end %>
+    </menu>
+  </dialog>
+</div>
