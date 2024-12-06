@@ -64,7 +64,6 @@
 
   @supports (field-sizing: content) {
     field-sizing: content;
-    max-block-size: calc(5lh + (2 * var(--comment-padding-block)));
     min-block-size: calc(3lh + (2 * var(--comment-padding-block)));
   }
 }
