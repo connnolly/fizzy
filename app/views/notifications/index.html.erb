@@ -1,0 +1,27 @@
+<% @page_title = "Notifications" %>
+
+<% content_for :header do %>
+  <nav>
+    <%= link_to root_path, class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
+      <%= image_tag "arrow-left.svg", aria: { hidden: true }, size: 24 %>
+      <span class="for-screen-reader">Go back</span>
+    <% end %>
+
+    <h1>All notifications</h1>
+
+    <%= link_to new_bucket_path, class: "btn flex-item-justify-end", style: "view-transition-name: new-bucket" do %>
+      <%= image_tag "add.svg", aria: { hidden: true }, size: 24 %>
+      <span class="for-screen-reader">Add a new project</span>
+    <% end %>
+  </nav>
+<% end %>
+
+<% if @unread.any? %>
+  <h2>New for you</h2>
+  <%= render @unread %>
+<% end %>
+
+<% if @read.any? %>
+<h2>Previously read</h2>
+<%= render @read %>
+<% end %>

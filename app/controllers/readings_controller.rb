@@ -8,6 +8,6 @@ class ReadingsController < ApplicationController
 
   private
     def mark_bubble_notifications_read
-      Current.user.notifications.where(bubble: @bubble).update(read: true)
+      Current.user.notifications.where(bubble: @bubble).update(read_at: Time.current)
     end
 end

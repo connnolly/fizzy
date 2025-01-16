@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_01_15_122810) do
+ActiveRecord::Schema[8.1].define(version: 2025_01_16_163344) do
   create_table "accesses", force: :cascade do |t|
     t.integer "bucket_id", null: false
     t.integer "user_id", null: false
@@ -183,13 +183,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_122810) do
     t.integer "bubble_id", null: false
     t.string "resource_type", null: false
     t.integer "resource_id", null: false
-    t.boolean "read", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "read_at"
     t.index ["bubble_id"], name: "index_notifications_on_bubble_id"
     t.index ["event_id"], name: "index_notifications_on_event_id"
     t.index ["resource_type", "resource_id"], name: "index_notifications_on_resource"
-    t.index ["user_id", "read", "created_at"], name: "index_notifications_on_user_id_and_read_and_created_at", order: { read: :desc, created_at: :desc }
+    t.index ["user_id", "read_at", "created_at"], name: "index_notifications_on_user_id_and_read_at_and_created_at", order: { read_at: :desc, created_at: :desc }
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 

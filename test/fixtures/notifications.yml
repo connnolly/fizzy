@@ -3,7 +3,6 @@ logo_published_kevin:
   event: logo_published
   bubble: logo
   resource: logo (Bubble)
-  read: false
   created_at: <%= 1.week.ago %>
 
 layout_commented_kevin:
@@ -11,5 +10,4 @@ layout_commented_kevin:
   event: layout_commented
   bubble: layout
   resource: layout_overflowing_david (Comment)
-  read: false
   created_at: <%= 1.week.ago %>
