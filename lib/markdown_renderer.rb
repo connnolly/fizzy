@@ -37,6 +37,8 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   end
 
   def link(url, title, content)
+    return video_tag(url, title) if video_url?(url)
+
     attributes = { href: url }
     attributes[:title] = title if title
     attributes["data-turbo-frame"] = "_top"
@@ -63,5 +65,17 @@ class MarkdownRenderer < Redcarpet::Render::HTML
         id_counts[base_id] += 1
         id_counts[base_id] > 1 ? "#{base_id}-#{id_counts[base_id]}" : base_id
       end
+    end
+
+    def video_url?(url)
+      File.extname(url).downcase.match?(/\.(mp4|webm|ogg)/)
+    end
+
+    def video_tag(url, title)
+      <<~HTML.chomp
+        <video controls title="#{title}" width="1024">
+          <source src="#{url}" type="video/#{File.extname(url).delete('.')}">
+        </video>
+      HTML
     end
 end

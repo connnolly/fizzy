@@ -75,6 +75,10 @@ a:not([class]) {
   list-style: none;
 }
 
+video {
+  max-inline-size: 100%;
+}
+
 /* Printing */
 @page {
   margin: 1in;
