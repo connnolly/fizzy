@@ -17,9 +17,22 @@ And then run the development server:
 You'll be able to access the app in development at http://development-tenant.fizzy.localhost:3006
 
 
+## Running tests
+
+For fast feedback loops, unit tests can be run with:
+
+    bin/rails test
+
+The full continuous integration tests can be run with:
+
+    bin/ci
+
+
 ## Deploying
 
 Fizzy is deployed with Kamal. You'll need to have the 1Password CLI set up in order to access the secrets that are used when deploying. Provided you have that, it should be as simple as `bin/kamal deploy` to the correct environment.
+
+### Beta
 
 For beta:
 
@@ -29,6 +42,8 @@ Beta tenant is:
 
 - https://fizzy.37signals.works/
 
+
+### Production
 
 And for production:
 
