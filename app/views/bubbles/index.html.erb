@@ -19,7 +19,7 @@
         <% elsif @filter.buckets.one? %>
           <%= @filter.buckets.first.name %>
         <% else %>
-          <%= pluralize(@filter.buckets.size, "project") %>
+          <%= @filter.buckets.map(&:name).to_sentence %>
         <% end %>
       </h1>
       <%= render "bubbles/filters", filter: @filter %>
@@ -47,16 +47,20 @@
     <h2 class="txt-align-center flex-inline center txt-uppercase txt-medium margin-none-block-start margin-block-end">
       Considering
     </h2>
-    <%= render partial: "bubbles/card_mini", collection: @bubbles.where(stage: [@filter.buckets.first&.workflow&.stages&.first, nil]), as: :bubble, cached: true %>
+    <% if (unstaged_bubbles = @bubbles.where(stage: nil)).any? %>
+      <%= render partial: "bubbles/card_mini", collection: unstaged_bubbles, as: :bubble, cached: true %>
+    <% else %>
+      <p class="txt-medium translucent">Nothing here</p>
+    <% end %>
   </section>
   <section class="cards gap position-relative" style="align-items: center; view-transition-name: cards-container;" data-controller="bubble-size" data-action="turbo:morph@window->bubble-size#resize">
     <h2 class="txt-align-center flex-inline center txt-uppercase txt-medium margin-none-block-start margin-block-end">
       Doing
     </h2>
-    <% if @bubbles.any? %>
-      <%= render partial: "bubbles/card", collection: @bubbles.where.not(stage: @filter.buckets.first&.workflow&.stages&.first), as: :bubble, cached: true %>
+    <% if (staged_bubbles = @bubbles.where.not(stage: nil)).any? %>
+      <%= render partial: "bubbles/card", collection: staged_bubbles, as: :bubble, cached: true %>
     <% else %>
-      <p class="txt-medium"><strong>Nothing here.</strong></p>
+      <p class="txt-medium translucent">Nothing here</p>
     <% end %>
   </section>
 </div>
@@ -69,7 +73,7 @@
     <% if (popped_bubbles = Filter.from_params(@filter.as_params.merge(indexed_by: "popped")).tap { |f| f.creator = Current.user }.bubbles).any? %>
       <%= render partial: "bubbles/card", collection: popped_bubbles, as: :bubble, cached: true %>
     <% else %>
-      <p class="txt-medium"><strong>Nothing here.</strong></p>
+      <p class="txt-medium translucent">Nothing here</p>
     <% end %>
   </section>
 </div>
