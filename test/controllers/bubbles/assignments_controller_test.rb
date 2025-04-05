@@ -17,7 +17,7 @@ class Bubbles::AssignmentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_changes "bubbles(:logo).assigned_to?(users(:david))", from: true, to: false do
-      post bubble_assignments_url(bubbles(:logo)), params: { assignee_id: users(:kevin).id }, as: :turbo_stream
+      post bubble_assignments_url(bubbles(:logo)), params: { assignee_id: users(:david).id }, as: :turbo_stream
     end
     assert_response :success
   end
