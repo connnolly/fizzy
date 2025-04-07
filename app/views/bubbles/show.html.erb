@@ -22,12 +22,8 @@
   <nav class="align-start max-width">
     <%= link_to_home %>
 
-    <%= link_to "#", class: "btn flex-item-justify-start", data: { controller: "back-navigation hotkey", action: "keydown.esc@document->hotkey#click", back_navigation_fallback_destination_value: bubbles_path(bucket_id: @bubble.bucket) } do %>
-      <%= icon_tag "arrow-left" %>
-      <span class="for-screen-reader">Go Back</span>
-    <% end %>
+    <%= link_to_back fallback_path: bubbles_path(bucket_id: @bubble.bucket) %>
 
-    
     <div class="card__actions-container card__actions-container--top center border-radius flex-inline align-center justify-center gap"  style="--bubble-color: <%= @bubble.color %>;">
       <span>Considering</span>
       <% if @bubble.doing? %>

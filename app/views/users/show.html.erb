@@ -2,10 +2,7 @@
 
 <% content_for :header do %>
   <nav>
-    <%= link_to "javascript:window.history.back()", class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
-      <%= icon_tag "arrow-left" %>
-      <span class="for-screen-reader">Back</span>
-    <% end %>
+    <%= link_to_back %>
 
     <% if Current.user == @user %>
       <%= link_to edit_user_path(@user), class: "btn flex-item-justify-end", data: { turbo_frame: dom_id(@user) } do %>

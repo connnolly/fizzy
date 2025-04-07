@@ -2,10 +2,7 @@
 
 <% content_for :header do %>
   <nav>
-    <%= link_to user_path(@user), class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
-      <%= icon_tag "arrow-left" %>
-      <span class="for-screen-reader">Back</span>
-    <% end %>
+    <%= link_to_back fallback_path: user_path(@user) %>
   </nav>
 <% end %>
 
@@ -19,7 +16,7 @@
           <label class="btn avatar input--file txt-xx-large center fill-white">
             <%= image_tag user_avatar_path(@user), aria: { hidden: "true" }, class: "avatar", size: 128, data: { upload_preview_target: "image" } %>
             <%= form.file_field :avatar, id: "file", class: "input", accept: "image/*",
-                data: { upload_preview_target: "input", action: "upload-preview#previewImage" } %>
+                  data: { upload_preview_target: "input", action: "upload-preview#previewImage" } %>
             <span class="for-screen-reader">Profile avatar for <%= @user.name %></span>
           </label>
 
@@ -54,7 +51,7 @@
         </div>
         <button type="submit" id="log_in" class="btn btn--reversed center">
           <%= icon_tag "check" %>
-            <span class="for-screen-reader">Sign in</span>
+          <span class="for-screen-reader">Sign in</span>
         </button>
 
         <%= link_to "Cancel and go back", user_path(@user), data: { form_target: "cancel", turbo_frame: "_top" }, hidden: true %>

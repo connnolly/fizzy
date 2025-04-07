@@ -2,10 +2,7 @@
 
 <% content_for :header do %>
   <nav>
-    <%= link_to workflows_path, class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
-      <%= icon_tag "arrow-left" %>
-      <span class="for-screen-reader">Go back</span>
-    <% end %>
+    <%= link_to_back fallback_path: workflows_path %>
     <h1 class="txt-large center"><%= @page_title %></h1>
     <span class="btn btn--placeholder flex-item-justify-end"></span>
   </nav>

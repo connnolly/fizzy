@@ -2,10 +2,7 @@
 
 <% content_for :header do %>
   <nav>
-    <%= link_to bubbles_path(bucket_ids: [ @bbucket ]), class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
-      <%= icon_tag "arrow-left" %>
-      <span class="for-screen-reader">Go back</span>
-    <% end %>
+    <%= link_to_back fallback_path: bubbles_path(bucket_ids: [ @bbucket ]) %>
 
     <%= form_with model: @bucket, class: "flex-item-justify-end", method: :delete do |form| %>
       <%= form.button class: "btn btn--negative", data: { turbo_confirm: "Are you sure you want to delete this?" } do %>

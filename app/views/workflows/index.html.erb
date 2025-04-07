@@ -2,10 +2,8 @@
 
 <% content_for :header do %>
   <nav>
-    <%= link_to account_users_path, class: "btn flex-item-justify-start", data: { controller: "hotkey", action: "keydown.esc@document->hotkey#click" } do %>
-      <%= icon_tag "arrow-left" %>
-      <span class="for-screen-reader">Go back</span>
-    <% end %>
+    <%= link_to_back fallback_path: account_users_path %>
+
     <span class="btn btn--placeholder"></span>
 
     <h1 class="txt-large"><%= @page_title %></h1>
