@@ -4,7 +4,7 @@
   --expander-height: calc(1em + 1lh);
   --expander-width: 11ch;
   --expander-radius: calc(var(--expander-height) / 2);
-  --expander-duration: 350ms;
+  --expander-duration: 150ms;
 
   interpolate-size: allow-keywords;
   position: relative;
@@ -48,15 +48,14 @@
   padding-block-start: var(--expander-height);
 }
 
+/* For browsers that support animation */
 @supports selector(details::details-content) {
   .expander::details-content {
     --btn-border-radius: var(--expander-radius);
 
     block-size: var(--expander-height);
     border-radius: var(--expander-radius);
-    inline-size: var(--expander-width);
     inset: 0 auto auto 0;
-    min-inline-size: var(--expander-width);
     overflow: clip;
     position: absolute;
     transition: content-visibility var(--expander-duration) allow-discrete, block-size var(--expander-duration), inline-size var(--expander-duration);
@@ -65,9 +64,17 @@
   .expander[open]::details-content {
     block-size: auto;
     inline-size: auto;
+
+    box-shadow: 0 0 0 var(--hover-size) var(--hover-color);
+  }
+
+  .expander__content {
+    inline-size: var(--expander-width);
+    min-inline-size: var(--expander-width);
   }
 }
 
+/* Fallback for browsers that don't support animation */
 @supports not selector(details::details-content) {
   .expander__content {
     border-radius: var(--expander-radius);
@@ -77,6 +84,7 @@
 
     [open] & {
       block-size: auto;
+      box-shadow: 0 0 0 var(--hover-size) var(--hover-color);
       inline-size: auto;
     }
   }
