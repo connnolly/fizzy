@@ -2,8 +2,8 @@
   .panel {
     background-color: var(--color-bg);
     border: var(--panel-border-size, 1px) solid var(--panel-border-color, var(--color-subtle));
-    color: var(--color-ink);
     border-radius: var(--panel-border-radius, 1em);
+    color: var(--color-ink);
     inline-size: var(--panel-size, 60ch);
     max-inline-size: 100%;
     padding: var(--panel-padding, calc(var(--block-space) * 2));
