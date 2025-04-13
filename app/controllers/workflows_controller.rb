@@ -24,7 +24,7 @@ class WorkflowsController < ApplicationController
 
   def update
     @workflow.update! workflow_params
-    redirect_to workflow_path(@workflow)
+    redirect_to @workflow
   end
 
   def destroy
