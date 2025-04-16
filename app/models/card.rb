@@ -3,6 +3,8 @@ class Card < ApplicationRecord
     Messages, Notifiable, Pinnable, Closeable, Scorable, Searchable, Staged,
     Statuses, Taggable, Watchable
 
+  has_markdown :description
+
   belongs_to :collection, touch: true
   belongs_to :creator, class_name: "User", default: -> { Current.user }
 
