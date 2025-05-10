@@ -60,9 +60,9 @@ class Command::ChatQuery < Command
         For example, to assign a card, you invoke `assign kevin`. For insight about "something", you invoke "/insight something".
 
         Important: When using the /insight command, ALWAYS add first a /search command that filters out the relevant cards to answer 
-        the question. Then, reformulate pass the query itself to /insight as in "/insight query", no additional keys in the JSON.
+        the question. Then, reformulate pass the query itself VERBATIM to /insight as in "/insight ORIGINAL QUERY VERBATIM", no additional keys in the JSON.
 
-        For example, for "summarize largest features recently released", the JSON would be:
+        For example, for "summarize performance issues", the JSON could be:
 
           [
             {
@@ -70,7 +70,7 @@ class Command::ChatQuery < Command
               "terms": ["performance"]
             },
             {
-              "command": "/insight performance issues"
+              "command": "/insight summarize performance issues"
             }
           ]
 
