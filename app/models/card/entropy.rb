@@ -21,4 +21,8 @@ class Card::Entropy
   def auto_clean_at
     card.last_active_at + auto_clean_period
   end
+
+  def days_before_reminder
+    (auto_clean_period * 0.25).round
+  end
 end

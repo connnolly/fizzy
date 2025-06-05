@@ -1,8 +1,6 @@
 module Card::Entropic
   extend ActiveSupport::Concern
 
-  ENTROPY_REMINDER_BEFORE = 7.days
-
   included do
     scope :entropic_by, ->(period_name) do
       left_outer_joins(collection: :entropy_configuration)

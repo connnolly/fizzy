@@ -5,7 +5,7 @@ module EntropyHelper
 
   def entropy_bubble_options_for(card)
     {
-      daysBeforeReminder: Card::Entropic::ENTROPY_REMINDER_BEFORE.in_days.to_i,
+      daysBeforeReminder: card.entropy.days_before_reminder,
       closesAt: card.entropy.auto_clean_at.iso8601,
       action: card_entropy_action(card)
     }
@@ -14,7 +14,7 @@ module EntropyHelper
   def stalled_bubble_options_for(card)
     if card.last_activity_spike_at
       {
-        stalledAfterDays: Card::Stallable::STALLED_AFTER_LAST_SPIKE_PERIOD.in_days.to_i,
+        stalledAfterDays: card.entropy.days_before_reminder,
         lastActivitySpikeAt: card.last_activity_spike_at.iso8601
       }
     end
