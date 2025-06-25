@@ -12,14 +12,6 @@ class Command::GetInsight < Command
     Command::Result::InsightResponse.new(response.content)
   end
 
-  def undoable?
-    false
-  end
-
-  def needs_confirmation?
-    false
-  end
-
   private
     def chat
       chat = RubyLLM.chat
