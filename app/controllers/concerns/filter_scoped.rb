@@ -9,6 +9,11 @@ module FilterScoped
     DEFAULT_PARAMS = { indexed_by: "latest" }
 
     def set_filter
-      @filter = Current.user.filters.from_params params.reverse_merge(**DEFAULT_PARAMS).permit(*Filter::PERMITTED_PARAMS)
+      @expand_all = params[:expand_all]
+      if params[:filter_id].present?
+        @filter = Current.user.filters.find(params[:filter_id])
+      else
+        @filter = Current.user.filters.from_params params.reverse_merge(**DEFAULT_PARAMS).permit(*Filter::PERMITTED_PARAMS)
+      end
     end
 end

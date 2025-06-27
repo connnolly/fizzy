@@ -20,7 +20,7 @@
         <strong class="txt-medium overflow-ellipsis margin-none">Fizzy</strong>
 		<% end %>
 
-	<%= tag.dialog class: "fizzy-dialog filter events__popup popup popup--animated panel flex-column align-start fill-white",
+	<%= tag.dialog class: "fizzy-dialog filter margin-block-start-half popup popup--animated panel flex-column align-start fill-white",
 			data: {
 				action: "turbo:before-cache@document->dialog#close keydown->navigable-list#navigate filter:changed->navigable-list#reset toggle->filter#filter",
 				controller: "filter navigable-list",
@@ -32,12 +32,12 @@
 
 		<%= render "events/filter/header" %>
 
-		<strong class="popup__group-title">Collections</strong>
 		<%= form_with url: events_path, method: :get, class: "popup__list",
 					data: { controller: "form" } do |form| %>
 			<% if Current.user.collections.many? %>
 				<ul class="popup__list">
 					<%= render "events/filter/custom_collections" %>
+					<strong class="popup__group-title">Collections</strong>
 					<%= render "events/filter/all_collections_option", form: form, filter: filter %>
 					<%= render partial: "events/filter/collection_option", collection: Current.user.collections.ordered_by_recently_accessed, as: :collection, locals: { form: form, filter: filter } %>
 				</ul>

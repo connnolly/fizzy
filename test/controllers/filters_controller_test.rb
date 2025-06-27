@@ -14,7 +14,7 @@ class FiltersControllerTest < ActionDispatch::IntegrationTest
         assignee_ids: [ users(:jz).id ],
         collection_ids: [ collections(:writebook).id ] }
     end
-    assert_redirected_to cards_path(Filter.last.as_params)
+    assert_redirected_to cards_path(filter_id: Filter.last.id)
 
     filter = Filter.last
     assert_predicate filter.indexed_by, :closed?
@@ -25,9 +25,12 @@ class FiltersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "destroy" do
+    filter = filters(:jz_assignments)
+    expected_params = filter.as_params
+
     assert_difference "users(:david).filters.count", -1 do
-      delete filter_path(filters(:jz_assignments))
+      delete filter_path(filter)
     end
-    assert_redirected_to cards_path(filters(:jz_assignments).as_params)
+    assert_redirected_to cards_path(expected_params)
   end
 end

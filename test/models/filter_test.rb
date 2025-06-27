@@ -114,16 +114,16 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "summary" do
-    assert_equal "Newest, tagged #mobile, and assigned to JZ ", filters(:jz_assignments).summary
+    assert_equal "Newest, #mobile, and assigned to JZ", filters(:jz_assignments).summary
 
     filters(:jz_assignments).update!(stages: workflow_stages(:qa_triage, :qa_in_progress))
-    assert_equal "Newest, tagged #mobile, assigned to JZ, and staged in Triage or In progress ", filters(:jz_assignments).summary
+    assert_equal "Newest, #mobile, assigned to JZ, and staged in Triage or In progress", filters(:jz_assignments).summary
 
     filters(:jz_assignments).update!(stages: [], assignees: [], tags: [], collections: [ collections(:writebook) ])
-    assert_equal "Newest in Writebook", filters(:jz_assignments).summary
+    assert_equal "Newest", filters(:jz_assignments).summary
 
     filters(:jz_assignments).update!(indexed_by: "stalled")
-    assert_equal "Stalled in Writebook", filters(:jz_assignments).summary
+    assert_equal "Stalled", filters(:jz_assignments).summary
   end
 
   test "get a clone with some changed params" do

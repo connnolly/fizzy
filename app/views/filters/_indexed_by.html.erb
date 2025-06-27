@@ -1,32 +1,44 @@
-<% if !filter.indexed_by.latest? %>
-  <div class="quick-filter position-relative" data-controller="dialog" data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside">
-    <button class="btn input input--select flex-inline txt-small" data-action="click->dialog#open:stop">
+<% if !filter.indexed_by.latest? || @expand_all %>
+  <div class="quick-filter position-relative <%= "default-value" if filter.indexed_by.latest? %>" data-controller="dialog" data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside">
+    <button class="btn input input--select flex-inline txt-x-small" data-action="click->dialog#open:stop">
       <span class="overflow-ellipsis">
         <%= filter.indexed_by.humanize %>
       </span>
     </button>
 
-    <dialog class="events__popup popup panel flex-column align-start gap-half fill-white shadow"
-        aria-label="Sort by…" aria-description="Sort by…"
-        data-dialog-target="dialog" data-action="turbo:before-cache@document->dialog#close">
-      <strong class="popup__title margin-block-start-half pad-inline-half">Sort by…</strong>
-      <%= form_with url: cards_path, method: :get, class: "popup__list",
-            data: { controller: "form" } do |form| %>
-        <% filter.as_params.except(:indexed_by).each do |key, value| %>
-          <%= filter_hidden_field_tag key, value %>
-        <% end %>
-
+    <%= tag.dialog class: "margin-block-start-half popup panel flex-column align-start gap-half fill-white shadow txt-small", data: {
+				action: "turbo:before-cache@document->dialog#close keydown->navigable-list#navigate",
+        aria: { label: "Sort by…", aria_description: "Sort by…" },
+				controller: "navigable-list",
+				dialog_target: "dialog",
+				navigable_list_focus_on_selection_value: false,
+				navigable_list_actionable_items_value: true } do %>
+      <strong class="popup__title txt-nowrap">Sort by…</strong>
+      
+      <ul class="popup__list" data-filter-target="list">
         <% Filter::INDEXES.each do |index| %>
-          <div class="btn popup__item">
-            <%= form.radio_button :indexed_by, index,
-                checked: filter.indexed_by == index,
-                data: { action: "change->form#submit" } %>
+          <li class="popup__group flex align-center" data-navigable-list-target="item">
+            <%= form_with url: cards_path, method: :get, class: "full-width", data: { controller: "form" } do |form| %>
+              <% filter.as_params.except(:indexed_by).each do |key, value| %>
+                <%= filter_hidden_field_tag key, value %>
+              <% end %>
 
-            <%= form.label :indexed_by, index.humanize, value: index, class: "overflow-ellipsis" %>
-            <%= icon_tag "check", class: "checked flex-item-justify-end" %>
-          </div>
+              <%= hidden_field_tag :indexed_by, index %>
+
+              <% if @expand_all %>
+                <%= hidden_field_tag :expand_all, @expand_all %>
+              <% end %>
+
+              <%= form.button type: "submit", class: "btn popup__item min-width full-width unpad-inline" do %>
+                <span class="overflow-ellipsis flex-item-grow"><%= index.humanize %></span>
+                <% if filter.indexed_by == index %>
+                  <%= icon_tag "check", class: "checked flex-item-justify-end" %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
         <% end %>
-      <% end %>
-    </dialog>
+      </ul>
+    <% end %>
   </div>
 <% end %>

@@ -1,53 +1,85 @@
-<% if filter.assignees.any? %>
+<% if filter.assignees.any? || @expand_all %>
   <div class="quick-filter position-relative" data-controller="dialog" data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside">
     <button class="btn input input--select flex-inline txt-x-small" data-action="click->dialog#open:stop">
       <span class="overflow-ellipsis">
         <% if filter.assignment_status.unassigned? %>
           No one
         <% elsif filter.assignees.any? %>
-          Assigned to <%= filter.assignees.map(&:familiar_name).to_sentence %>
+          Assigned to <%= filter.assignees.map(&:familiar_name).to_sentence(two_words_connector: " or ", last_word_connector: ", or ") %>
         <% else %>
           Assigned to…
         <% end %>
       </span>
     </button>
 
-    <dialog class="events__popup popup panel flex-column align-start gap-half fill-white shadow" data-dialog-target="dialog" data-action="turbo:before-cache@document->dialog#close">
-      <strong class="popup__title margin-block-start-half pad-inline-half overflow-ellipsis">Assigned to…</strong>
-      <%= form_with url: cards_path, method: :get, class: "popup__list",
-            data: { controller: "form" } do |form| %>
-        <% filter.as_params.except(:assignee_ids, :assignment_status).each do |key, value| %>
-          <%= filter_hidden_field_tag key, value %>
-        <% end %>
+    <%= tag.dialog class: "margin-block-start-half popup panel flex-column align-start gap-half fill-white shadow txt-small", data: {
+				action: "turbo:before-cache@document->dialog#close keydown->navigable-list#navigate filter:changed->navigable-list#reset toggle->filter#filter",
+        aria: { label: "Assigned to…", aria_description: "Assigned to…" },
+				controller: "filter navigable-list",
+				dialog_target: "dialog",
+				navigable_list_focus_on_selection_value: false,
+				navigable_list_actionable_items_value: true } do %>
+      <strong class="popup__title txt-nowrap">Assigned to…</strong>
 
-        <%= link_to cards_path(filter.as_params.except(:assignee_ids, :assignment_status)), class: "btn popup__item" do %>
-          <span class="overflow-ellipsis">Clear all</span>
-        <% end %>
-
-        <div class="btn popup__item">
-          <%= form.check_box "assignment_status", {
-            checked: filter.assignment_status.unassigned?,
-            data: { action: "change->form#submit" },
-            include_hidden: false,
-          }, "unassigned" %>
-
-          <%= form.label :assignment_status, "No one", class: "overflow-ellipsis" %>
-          <%= icon_tag "check", class: "checked flex-item-justify-end" %>
-        </div>
-
-        <% User.active.order(:name).each do |user| %>
-          <div class="btn popup__item">
-            <%= form.check_box "assignee_ids[]", {
-              checked: filter.assignees.include?(user),
-              data: { action: "change->form#submit" },
-              include_hidden: false,
-            }, user.id %>
-
-            <%= form.label "assignee_ids[]", user.name, for: dom_id(user, :filter), class: "overflow-ellipsis" %>
-            <%= icon_tag "check", class: "checked flex-item-justify-end" %>
-          </div>
-        <% end %>
+      <% if User.active.many? %>
+        <%= text_field_tag :search, nil, placeholder: "Filter…", class: "input input--transparent txt-small", autofocus: true,
+              type: "search", autocorrect: "off", autocomplete: "off", data: { "1p-ignore": "true", filter_target: "input", action: "input->filter#filter" } %>
       <% end %>
-    </dialog>
+
+      <ul class="popup__list" data-filter-target="list">
+        <li class="popup__group flex align-center" data-value="no one" data-filter-target="item" data-navigable-list-target="item">
+          <%= form_with url: cards_path, method: :get, class: "full-width", data: { controller: "form" } do |form| %>
+            <% filter.as_params.except(:assignee_ids, :assignment_status).each do |key, value| %>
+              <%= filter_hidden_field_tag key, value %>
+            <% end %>
+
+            <% unless filter.assignment_status.unassigned? %>
+              <%= hidden_field_tag :assignment_status, "unassigned" %>
+            <% end %>
+
+            <% if @expand_all %>
+              <%= hidden_field_tag :expand_all, @expand_all %>
+            <% end %>
+
+            <%= form.button type: "submit", class: "btn popup__item min-width full-width unpad-inline" do %>
+              <span class="overflow-ellipsis flex-item-grow">No one</span>
+              <% if filter.assignment_status.unassigned? %>
+                <%= icon_tag "check", class: "checked flex-item-justify-end" %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </li>
+        <% User.active.order(:name).each do |user| %>
+          <li class="popup__group flex align-center" data-value="<%= user.name.downcase %>" data-filter-target="item" data-navigable-list-target="item">
+            <%= form_with url: cards_path, method: :get, class: "full-width", data: { controller: "form" } do |form| %>
+              <% filter.as_params.except(:assignee_ids, :assignment_status).each do |key, value| %>
+                <%= filter_hidden_field_tag key, value %>
+              <% end %>
+
+              <% filter.assignees.each do |existing_assignee| %>
+                <% unless existing_assignee == user %>
+                  <%= hidden_field_tag "assignee_ids[]", existing_assignee.id %>
+                <% end %>
+              <% end %>
+
+              <% unless filter.assignees.include?(user) %>
+                <%= hidden_field_tag "assignee_ids[]", user.id %>
+              <% end %>
+
+              <% if @expand_all %>
+                <%= hidden_field_tag :expand_all, @expand_all %>
+              <% end %>
+
+              <%= form.button type: "submit", class: "btn popup__item min-width full-width unpad-inline" do %>
+                <span class="overflow-ellipsis flex-item-grow"><%= user.name %></span>
+                <% if filter.assignees.include?(user) %>
+                  <%= icon_tag "check", class: "checked flex-item-justify-end" %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 <% end %>

@@ -1,8 +1,11 @@
 @layer components {
   .filters {
+    view-transition-name: "filters";
+    z-index: var(--z-popup);
+
     #header:has(&) {
       position: relative;
-      z-index: 1;
+      z-index: var(--z-popup);
     }
 
     .btn {
@@ -94,19 +97,8 @@
     }
   }
 
-  .panel:is(.filter__popup) {
-    --panel-size: 100ch;
-    --panel-padding: var(--block-space);
-
-    inline-size: auto !important;
-    min-inline-size: var(--panel-size);
-    max-block-size: calc(90dvh - (2 * var(--block-space-double)));
-    max-inline-size: calc(100dvw - (2 * var(--block-space-double)));
-    z-index: 1;
-  }
-
   .quick-filter {
-    &:has(input:not(.default-value):checked) {
+    &:not(.default-value):has(.checked) {
       .input--select {
         --input-background: var(--color-selected);
       }

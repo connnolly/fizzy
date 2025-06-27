@@ -3,16 +3,17 @@ class FiltersController < ApplicationController
 
   def create
     @filter = Current.user.filters.remember filter_params
-    redirect_to cards_path(@filter.as_params)
+    redirect_to cards_path(filter_id: @filter.id)
   end
 
   def destroy
+    filter_params = @filter.as_params
     @filter.destroy!
 
     if request.referer == root_url
       redirect_to root_path
     else
-      redirect_to cards_path(@filter.as_params)
+      redirect_to cards_path(filter_params)
     end
   end
 

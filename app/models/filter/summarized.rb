@@ -1,16 +1,18 @@
 module Filter::Summarized
   def summary
-    [ index_summary, tag_summary, assignee_summary, creator_summary, stage_summary, terms_summary ].compact.to_sentence + " #{collection_summary}"
+    [ index_summary, tag_summary, assignee_summary, creator_summary, stage_summary, terms_summary ].compact.to_sentence
   end
 
   private
     def index_summary
-      indexed_by.humanize
+      unless indexed_by.latest?
+        indexed_by.humanize
+      end
     end
 
     def tag_summary
       if tags.any?
-        "tagged #{tags.map(&:hashtag).to_choice_sentence}"
+        "#{tags.map(&:hashtag).to_choice_sentence}"
       end
     end
 
@@ -25,12 +27,6 @@ module Filter::Summarized
     def stage_summary
       if stages.any?
         "staged in #{stages.pluck(:name).to_choice_sentence}"
-      end
-    end
-
-    def collection_summary
-      if collections.any?
-        "in #{collections.pluck(:name).to_choice_sentence}"
       end
     end
 

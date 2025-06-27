@@ -94,7 +94,7 @@
     }
 
     &:has(input:checked)  {
-      --btn-background: var(--color-ink-lightest);
+      --btn-background: transparent;
       --btn-color: var(--color-ink);
 
       .icon {

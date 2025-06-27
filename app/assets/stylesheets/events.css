@@ -122,10 +122,6 @@
     text-align: center;
   }
 
-  .events__popup {
-    margin-block-start: var(--block-space-half);
-  }
-
   /* Event
   /* ------------------------------------------------------------------------ */
 
