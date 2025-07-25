@@ -17,6 +17,8 @@
       <span class="for-screen-reader">Add a tag</span>
     </button>
 
-    <%= turbo_frame_tag card, :tagging, src: new_card_tagging_path(card) %>
+    <dialog class="popup panel flex-column align-start justify-start fill-white shadow txt-small" data-dialog-target="dialog">
+      <%= turbo_frame_tag card, :tagging, src: new_card_tagging_path(card) %>
+    </dialog>
   </div>
 </div>
