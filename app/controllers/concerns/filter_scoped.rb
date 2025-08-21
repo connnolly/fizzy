@@ -13,7 +13,7 @@ module FilterScoped
   end
 
   private
-    DEFAULT_PARAMS = { indexed_by: "latest" }
+    DEFAULT_PARAMS = { indexed_by: "all", sorted_by: "latest" }
 
     def set_filter
       if params[:filter_id].present?

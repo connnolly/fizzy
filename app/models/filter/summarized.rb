@@ -1,12 +1,18 @@
 module Filter::Summarized
   def summary
-    [ index_summary, tag_summary, assignee_summary, creator_summary, stage_summary, terms_summary ].compact.to_sentence
+    [ index_summary, sort_summary, tag_summary, assignee_summary, creator_summary, stage_summary, terms_summary ].compact.to_sentence
   end
 
   private
     def index_summary
-      unless indexed_by.latest?
+      unless indexed_by.all?
         indexed_by.humanize
+      end
+    end
+
+    def sort_summary
+      unless sorted_by.latest?
+        sorted_by.humanize
       end
     end
 

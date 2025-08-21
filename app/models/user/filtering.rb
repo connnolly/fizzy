@@ -44,11 +44,15 @@ class User::Filtering
   def any?
     filter.tags.any? || filter.assignees.any? || filter.creators.any? || filter.closers.any? ||
       filter.stages.any? || filter.terms.any? || filter.card_ids&.any? ||
-      filter.assignment_status.unassigned? || !filter.indexed_by.latest?
+      filter.assignment_status.unassigned? || !filter.indexed_by.all? || !filter.sorted_by.latest?
   end
 
   def show_indexed_by?
-    expanded? || !filter.indexed_by.latest?
+    expanded? || !filter.indexed_by.all?
+  end
+
+  def show_sorted_by?
+    expanded? || !filter.sorted_by.latest?
   end
 
   def show_tags?
@@ -65,10 +69,6 @@ class User::Filtering
 
   def show_closers?
     expanded? || filter.closers.any?
-  end
-
-  def show_time_window?(name)
-    expanded? || filter.public_send("#{name}_window").present?
   end
 
   def enable_collection_filtering(&block)

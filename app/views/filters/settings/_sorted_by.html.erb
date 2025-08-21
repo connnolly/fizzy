@@ -1,33 +1,33 @@
 <% filter = user_filtering.filter %>
 
-<% if user_filtering.show_indexed_by? %>
-  <div class="quick-filter position-relative <%= "default-value" if filter.indexed_by.all? %>" data-controller="dialog" data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside">
+<% if user_filtering.show_sorted_by? %>
+  <div class="quick-filter position-relative <%= "default-value" if filter.sorted_by.latest? %>" data-controller="dialog" data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside">
     <button class="btn input input--select flex-inline txt-x-small" data-action="click->dialog#open:stop">
       <span class="overflow-ellipsis">
-        <%= filter.indexed_by == "all" ? "Status" : filter.indexed_by.humanize %>
+        <%= filter.sorted_by.humanize %>
       </span>
     </button>
 
-    <%= filter_dialog "Filter by…" do %>
-      <strong class="popup__title txt-nowrap">Filter by…</strong>
+    <%= filter_dialog "Sort by…" do %>
+      <strong class="popup__title txt-nowrap">Sort by…</strong>
 
       <ul class="popup__list" data-filter-target="list">
-        <% Filter::INDEXES.each do |index| %>
+        <% Filter::SORTED_BY.each do |sort| %>
           <li class="popup__group" data-navigable-list-target="item">
             <%= form_with url: cards_path, method: :get, class: "full-width", data: { controller: "form" } do |form| %>
-              <% filter.as_params.except(:indexed_by).each do |key, value| %>
+              <% filter.as_params.except(:sorted_by).each do |key, value| %>
                 <%= filter_hidden_field_tag key, value %>
               <% end %>
 
-              <%= hidden_field_tag :indexed_by, index %>
+              <%= hidden_field_tag :sorted_by, sort %>
 
               <% if user_filtering.expanded? %>
                 <%= hidden_field_tag :expand_all, user_filtering.expanded? %>
               <% end %>
 
               <%= form.button type: "submit", class: "popup__item btn" do %>
-                <span class="overflow-ellipsis flex-item-grow"><%= index.humanize %></span>
-                <% if filter.indexed_by == index %>
+                <span class="overflow-ellipsis flex-item-grow"><%= sort.humanize %></span>
+                <% if filter.sorted_by == sort %>
                   <%= icon_tag "check", class: "checked flex-item-justify-end" %>
                 <% end %>
               <% end %>

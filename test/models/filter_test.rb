@@ -53,7 +53,7 @@ class FilterTest < ActiveSupport::TestCase
 
   test "remembering equivalent filters" do
     assert_difference "Filter.count", +1 do
-      filter = users(:david).filters.remember(indexed_by: "latest", assignment_status: "unassigned", tag_ids: [ tags(:mobile).id ])
+      filter = users(:david).filters.remember(sorted_by: "latest", assignment_status: "unassigned", tag_ids: [ tags(:mobile).id ])
 
       assert_changes "filter.reload.updated_at" do
         assert_equal filter, users(:david).filters.remember(tag_ids: [ tags(:mobile).id ], assignment_status: "unassigned")
@@ -69,7 +69,7 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "turning into params" do
-    filter = users(:david).filters.new indexed_by: "latest", tag_ids: "", assignee_ids: [ users(:jz).id ], collection_ids: [ collections(:writebook).id ]
+    filter = users(:david).filters.new sorted_by: "latest", tag_ids: "", assignee_ids: [ users(:jz).id ], collection_ids: [ collections(:writebook).id ]
     expected = { assignee_ids: [ users(:jz).id ], collection_ids: [ collections(:writebook).id ] }
     assert_equal expected, filter.as_params
   end
@@ -122,12 +122,12 @@ class FilterTest < ActiveSupport::TestCase
     filters(:jz_assignments).update!(stages: [], assignees: [], tags: [], collections: [ collections(:writebook) ])
     assert_equal "Newest", filters(:jz_assignments).summary
 
-    filters(:jz_assignments).update!(indexed_by: "stalled")
+    filters(:jz_assignments).update!(indexed_by: "stalled", sorted_by: "latest")
     assert_equal "Stalled", filters(:jz_assignments).summary
   end
 
   test "get a clone with some changed params" do
-    seed_filter = users(:david).filters.new indexed_by: "active", terms: [ "haggis" ]
+    seed_filter = users(:david).filters.new indexed_by: "all", terms: [ "haggis" ]
     filter = seed_filter.with(indexed_by: "closed")
 
     assert filter.indexed_by.closed?

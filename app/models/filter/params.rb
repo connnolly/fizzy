@@ -4,6 +4,7 @@ module Filter::Params
   PERMITTED_PARAMS = [
     :assignment_status,
     :indexed_by,
+    :sorted_by,
     :engagement_status,
     :creation,
     :closure,
@@ -40,6 +41,7 @@ module Filter::Params
   def as_params
     {}.tap do |params|
       params[:indexed_by]        = indexed_by
+      params[:sorted_by]         = sorted_by
       params[:engagement_status] = engagement_status
       params[:creation]          = creation
       params[:closure]           = closure

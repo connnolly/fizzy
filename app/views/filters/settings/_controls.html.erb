@@ -14,7 +14,7 @@
     <% end %>
   <% end %>
 
-  <%= link_to cards_path(filter.as_params.except(:assignee_ids, :assignment_status, :card_ids, :creator_ids, :closer_ids, :stage_ids, :tag_ids, :terms, :indexed_by, :creation, :closure)), class: "btn btn--remove txt-x-small" do %>
+  <%= link_to cards_path(filter.as_params.except(:assignee_ids, :assignment_status, :card_ids, :creator_ids, :closer_ids, :stage_ids, :tag_ids, :terms, :indexed_by, :sorted_by, :creation, :closure)), class: "btn btn--remove txt-x-small" do %>
     <%= icon_tag "close" %>
     <span class="for-screen-reader">Clear all</span>
   <% end %>

@@ -20,13 +20,20 @@ class Card < ApplicationRecord
 
   scope :indexed_by, ->(index) do
     case index
+    when "stalled" then stalled
+    when "closing_soon" then closing_soon
+    when "falling_back_soon" then falling_back_soon
+    when "closed" then closed.recently_closed_first
+    else all
+    end
+  end
+
+  scope :sorted_by, ->(sort) do
+    case sort
     when "newest" then reverse_chronologically
     when "oldest" then chronologically
     when "latest" then latest
-    when "stalled" then stalled.chronologically
-    when "closing_soon" then closing_soon.chronologically
-    when "falling_back_soon" then falling_back_soon.chronologically
-    when "closed" then closed.recently_closed_first
+    else latest
     end
   end
 
