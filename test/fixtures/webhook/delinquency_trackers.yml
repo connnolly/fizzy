@@ -2,12 +2,10 @@
 
 active_webhook_tracker:
   webhook: active
-  last_reset_at: <%= 1.hour.ago %>
-  total_count: 1
-  failed_count: 1
+  consecutive_failures_count: 1
+  first_failure_at: <%= 1.hour.ago %>
 
 inactive_webhook_tracker:
   webhook: inactive
-  last_reset_at: <%= 1.hour.ago %>
-  total_count: 1
-  failed_count: 1
+  consecutive_failures_count: 1
+  first_failure_at: <%= 1.hour.ago %>

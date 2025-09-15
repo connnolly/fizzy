@@ -1319,21 +1319,20 @@ columns:
     collation:
     comment:
   webhook_delinquency_trackers:
-  - *5
   - !ruby/object:ActiveRecord::ConnectionAdapters::SQLite3::Column
     auto_increment:
-    name: failed_count
+    name: consecutive_failures_count
     cast_type: *3
     sql_type_metadata: *4
-    'null': false
-    default: 0
+    'null': true
+    default:
     default_function:
     collation:
     comment:
-  - *6
+  - *5
   - !ruby/object:ActiveRecord::ConnectionAdapters::SQLite3::Column
     auto_increment:
-    name: last_reset_at
+    name: first_failure_at
     cast_type: *1
     sql_type_metadata: *2
     'null': true
@@ -1341,16 +1340,7 @@ columns:
     default_function:
     collation:
     comment:
-  - !ruby/object:ActiveRecord::ConnectionAdapters::SQLite3::Column
-    auto_increment:
-    name: total_count
-    cast_type: *3
-    sql_type_metadata: *4
-    'null': false
-    default: 0
-    default_function:
-    collation:
-    comment:
+  - *6
   - *9
   - &37 !ruby/object:ActiveRecord::ConnectionAdapters::SQLite3::Column
     auto_increment:

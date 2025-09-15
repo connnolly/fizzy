@@ -7,31 +7,28 @@ class Webhook::DelinquencyTrackerTest < ActiveSupport::TestCase
     successful_delivery = webhook_deliveries(:successfully_completed)
     failed_delivery = webhook_deliveries(:errored)
 
-    assert_difference -> { tracker.reload.total_count }, +1 do
-      assert_no_difference -> { tracker.reload.failed_count } do
-        tracker.record_delivery_of(successful_delivery)
-      end
+    tracker.update!(consecutive_failures_count: 5)
+    tracker.record_delivery_of(successful_delivery)
+    tracker.reload
+
+    assert_equal 0, tracker.consecutive_failures_count
+    assert_nil tracker.first_failure_at
+
+    assert_difference -> { tracker.reload.consecutive_failures_count }, +1 do
+      tracker.record_delivery_of(failed_delivery)
     end
 
-    assert_difference -> { tracker.reload.total_count }, +1 do
-      assert_difference -> { tracker.reload.failed_count }, +1 do
+    tracker.reload
+    assert_not_nil tracker.first_failure_at
+
+    assert_difference -> { tracker.reload.consecutive_failures_count }, +1 do
+      assert_no_difference -> { tracker.reload.first_failure_at } do
         tracker.record_delivery_of(failed_delivery)
       end
     end
 
-    travel_to 13.hours.from_now do
-      tracker.update!(total_count: 11, failed_count: 5)
-
-      tracker.record_delivery_of(failed_delivery)
-      tracker.reload
-
-      assert_equal 0, tracker.total_count
-      assert_equal 0, tracker.failed_count
-      assert tracker.last_reset_at > 1.minute.ago
-    end
-
-    travel_to 26.hours.from_now do
-      tracker.update!(total_count: 50, failed_count: 50)
+    travel_to 2.hours.from_now do
+      tracker.update!(consecutive_failures_count: 9)
       webhook.activate
 
       assert_changes -> { webhook.reload.active? }, from: true, to: false do
