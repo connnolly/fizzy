@@ -160,6 +160,6 @@
       Fizzy
     </figure>
     <%= yield %>
-    <a href="javascript:window.history.back();">&larr; <span>Go back</span></a>
+    <%= link_to "&larr; Back home".html_safe, root_url %>
   </body>
 </html>
