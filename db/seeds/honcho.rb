@@ -9,10 +9,8 @@ mike  = find_or_create_user "Mike Dalessio", "mike@37signals.com"
 
 login_as david
 
-# Array of authors for random assignment
 authors = [ david, jason, jz, kevin, jorge, mike ]
 
-# Card titles for reuse across collections
 card_titles = [
   "Implement authentication",
   "Design landing page",
@@ -23,38 +21,21 @@ card_titles = [
   "Add user profiles",
   "Implement search",
   "Create admin panel",
-  "Set up CI/CD",
-  "Design logo",
-  "Create documentation",
-  "Add payment system",
-  "Implement notifications",
-  "Set up analytics",
-  "Create mobile layout",
-  "Add social sharing",
-  "Implement caching",
-  "Set up monitoring",
-  "Create error handling"
+  "Set up CI/CD"
 ]
 
-# Create 10 collections
 collections = [
   "Project Launch",
   "Frontend Dev",
   "Backend Dev",
   "Design System",
-  "Testing Suite",
-  "Performance",
-  "User Experience",
-  "API Development",
-  "DevOps",
-  "Documentation"
+  "Testing Suite"
 ]
 
 time_range = (60 .. 30.days.in_minutes)
 
 collections.each_with_index do |collection_name, index|
   create_collection(collection_name, access_to: authors.sample(3)).tap do |collection|
-    # Create 20 unique cards for each collection
     card_titles.each do |title|
       travel(-rand(time_range).minutes) do
         card = create_card title,

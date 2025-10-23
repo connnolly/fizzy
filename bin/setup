@@ -35,6 +35,10 @@ step() {
 }
 
 needs_seeding() {
+  if [ "$CI" != "" ] ; then
+    return 1
+  fi
+
   has_tenant=$(bin/rails runner "pp ApplicationRecord.tenants.any? { ApplicationRecord.with_tenant(_1) { Account.sole } }" 2>/dev/null)
   if [ "$has_tenant" = "true" ] ; then
     return 1
