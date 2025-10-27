@@ -113,6 +113,14 @@
       }
     }
 
+    .checked {
+      display: none;
+    }
+
+    &[aria-checked="true"] .checked {
+      display: block;
+    }
+
     &[aria-selected] {
       background-color: var(--color-selected);
 
@@ -137,14 +145,6 @@
     max-inline-size: 100%;
     padding: var(--inline-space-half) var(--popup-item-padding-inline);
     text-align: start;
-
-    .icon.checked {
-      display: none;
-
-      .popup__item--current & {
-        display: block;
-      }
-    }
   }
 
   .popup__icon {
