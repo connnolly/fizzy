@@ -10,15 +10,15 @@ class ColumnTest < ActiveSupport::TestCase
   test "touch all the cards when the name or color changes" do
     column = columns(:writebook_triage)
 
-    assert_enqueued_with(job: Card::TouchAllJob) do
+    assert_changes -> { column.cards.first.updated_at } do
       column.update!(name: "New Name")
     end
 
-    assert_enqueued_with(job: Card::TouchAllJob) do
+    assert_changes -> { column.cards.first.updated_at } do
       column.update!(color: "#FF0000")
     end
 
-    assert_no_enqueued_jobs(only: Card::TouchAllJob) do
+    assert_no_changes -> { column.cards.first.updated_at } do
       column.update!(updated_at: 1.hour.from_now)
     end
   end
@@ -26,7 +26,7 @@ class ColumnTest < ActiveSupport::TestCase
   test "touch all collection cards when column is destroyed" do
     column = columns(:writebook_triage)
 
-    assert_enqueued_with(job: Card::TouchAllJob, args: [ column.collection ]) do
+    assert_changes -> { column.collection.cards.first.updated_at } do
       column.destroy
     end
   end

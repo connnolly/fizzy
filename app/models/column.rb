@@ -8,23 +8,11 @@ class Column < ApplicationRecord
   validates :color, presence: true
 
   before_validation :set_default_color
-  after_save_commit :touch_all_cards_later, if: :should_invalidate_cards?
-  after_destroy_commit :touch_all_collection_cards
+  after_save_commit    -> { cards.touch_all }, if: -> { saved_change_to_name? || saved_change_to_color? }
+  after_destroy_commit -> { collection.cards.touch_all }
 
   private
     def set_default_color
       self.color ||= Card::DEFAULT_COLOR
-    end
-
-    def touch_all_cards_later
-      Card::TouchAllJob.perform_later(self)
-    end
-
-    def should_invalidate_cards?
-      saved_change_to_name? || saved_change_to_color?
-    end
-
-    def touch_all_collection_cards
-      Card::TouchAllJob.perform_later(collection)
     end
 end
