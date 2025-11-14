@@ -1,24 +1,24 @@
 # Columns for writebook board (which has qa workflow)
 writebook_triage:
   name: Triage
-  color: "#000000"
+  color: "var(--color-card-4)"
   board: writebook
   position: 0
 
 writebook_in_progress:
   name: In progress
-  color: "#3b3633"
+  color: "var(--color-card-2)"
   board: writebook
   position: 1
 
 writebook_on_hold:
   name: On Hold
-  color: "#67695e"
+  color: "var(--color-card-4)"
   board: writebook
   position: 2
 
 writebook_review:
   name: Review
-  color: "#eb7a32"
+  color: "var(--color-card-3)"
   board: writebook
   position: 3

@@ -8,9 +8,9 @@ class Column::ColoredTest < ActiveSupport::TestCase
   end
 
   test "update the column color" do
-    columns(:writebook_triage).update!(color: "oklch(var(--lch-yellow-medium))")
+    columns(:writebook_triage).update!(color: "var(--color-card-3)")
 
     assert_not_nil columns(:writebook_triage).color
-    assert_equal Color.for_value("oklch(var(--lch-yellow-medium))"), columns(:writebook_triage).color
+    assert_equal Color.for_value("var(--color-card-3)"), columns(:writebook_triage).color
   end
 end
