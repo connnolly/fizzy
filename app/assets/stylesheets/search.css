@@ -50,13 +50,7 @@ summary {
 
   .search__reset {
     --btn-background: var(--color-terminal-bg);
-    --btn-size: 1.25lh;
-
-    @media (min-width: 800px) {
-      .search__input:placeholder-shown ~ & {
-        opacity: 0;
-      }
-    }
+    --btn-size: 1.5lh;
   }
 
 
