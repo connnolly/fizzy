@@ -33,7 +33,7 @@ class RequestForgeryProtectionTest < ActionDispatch::IntegrationTest
   test "fail and report when token doesn't match, regardless of Sec-Fetch-Site" do
     assert_report
 
-    assert_log(includes: ["CSRF protection check", "sec_fetch_site pass (same-origin)", "token fail"]) do
+    assert_log(includes: [ "CSRF protection check", "sec_fetch_site pass (same-origin)", "token fail" ]) do
       assert_no_difference -> { Board.count } do
         post boards_path,
           params: { board: { name: "Test Board" }, authenticity_token: "invalid-token" },
@@ -45,8 +45,8 @@ class RequestForgeryProtectionTest < ActionDispatch::IntegrationTest
   test "fail and report when Origin doesn't match, regardless of Sec-Fetch-Site" do
     assert_report
 
-    assert_log(includes: ["CSRF protection check", "sec_fetch_site pass (same-origin)",
-      "token pass", "origin fail (evil-site.com)"]) do
+    assert_log(includes: [ "CSRF protection check", "sec_fetch_site pass (same-origin)",
+      "token pass", "origin fail (evil-site.com)" ]) do
       assert_no_difference -> { Board.count } do
         post boards_path,
           params: { board: { name: "Test Board" }, authenticity_token: csrf_token },
@@ -58,7 +58,7 @@ class RequestForgeryProtectionTest < ActionDispatch::IntegrationTest
   test "succeed and report when Sec-Fetch-Site is cross-site and CSRF token matches" do
     assert_report
 
-    assert_log(includes: ["CSRF protection check", "sec_fetch_site fail (cross-site)", "token pass"]) do
+    assert_log(includes: [ "CSRF protection check", "sec_fetch_site fail (cross-site)", "token pass" ]) do
       assert_difference -> { Board.count }, +1 do
         post boards_path,
           params: { board: { name: "Test Board" }, authenticity_token: csrf_token },
@@ -70,7 +70,7 @@ class RequestForgeryProtectionTest < ActionDispatch::IntegrationTest
   test "succeed and report when Sec-Fetch-Site is none" do
     assert_report
 
-    assert_log(includes: ["CSRF protection check", "sec_fetch_site fail (none)", "token pass"]) do
+    assert_log(includes: [ "CSRF protection check", "sec_fetch_site fail (none)", "token pass" ]) do
       assert_difference -> { Board.count }, +1 do
         post boards_path,
           params: { board: { name: "Test Board" }, authenticity_token: csrf_token },
@@ -82,7 +82,7 @@ class RequestForgeryProtectionTest < ActionDispatch::IntegrationTest
   test "succeed and report when Sec-Fetch-Site is missing" do
     assert_report
 
-    assert_log(includes: ["CSRF protection check", "sec_fetch_site fail ()", "token pass"]) do
+    assert_log(includes: [ "CSRF protection check", "sec_fetch_site fail ()", "token pass" ]) do
       assert_difference -> { Board.count }, +1 do
         post boards_path, params: { board: { name: "Test Board" }, authenticity_token: csrf_token }
       end
