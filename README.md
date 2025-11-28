@@ -39,6 +39,8 @@ Fizzy supports SQLite (default, recommended for most scenarios) and MySQL. You c
 
 ```sh
 DATABASE_ADAPTER=mysql bin/rails
+DATABASE_ADAPTER=mysql bin/test
+bin/ci # Runs tests against both SQLite and MySQL
 ```
 
 ### Outbound Emails
