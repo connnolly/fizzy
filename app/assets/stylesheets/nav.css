@@ -73,6 +73,7 @@
                 0 0.2em 0.2em oklch(var(--lch-blue-medium) / 5%),
                 0 0.4em 0.4em oklch(var(--lch-blue-medium) / 5%),
                 0 0.8em 0.8em oklch(var(--lch-blue-medium) / 5%);
+    font-size: var(--text-small);
     grid-template-rows: auto 1fr auto;
     gap: var(--nav-section-gap);
     max-block-size: calc(100vh - var(--block-space) - var(--footer-height));
@@ -99,6 +100,18 @@
   .nav__close {
     @media (any-hover: hover) {
       display: none !important;
+    }
+  }
+
+  .nav__section {
+    border-block-end: 1px solid var(--color-ink-lighter);
+
+    &:first-of-type {
+      border-block-start: 1px solid var(--color-ink-lighter);
+    }
+
+    &[open] {
+      padding-block-end: 0.4rem;
     }
   }
 
@@ -207,7 +220,6 @@
 
   .nav__footer {
     background-color: var(--color-canvas);
-    border-block-start: 1px solid var(--color-ink-lighter);
     font-size: var(--text-small);
     line-height: 1.6;
     margin-block-start: calc(-1 * var(--nav-section-gap));
