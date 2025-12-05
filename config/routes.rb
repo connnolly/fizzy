@@ -232,6 +232,23 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "pwa#service_worker"
 
+  # Claude JSON API
+  namespace :api do
+    resources :boards, only: [ :index, :show ]
+
+    resources :cards, only: [ :show, :create, :update ] do
+      member do
+        post :move
+      end
+      resources :comments, only: [ :create ]
+      post "tags/:title", to: "tags#add_to_card", as: :add_tag
+      delete "tags/:title", to: "tags#remove_from_card", as: :remove_tag
+    end
+
+    get :search, to: "search#index"
+    resources :tags, only: [ :index ]
+  end
+
   namespace :admin do
     mount MissionControl::Jobs::Engine, at: "/jobs"
     get "stats", to: "stats#show"
