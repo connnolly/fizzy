@@ -32,7 +32,7 @@ class Api::BoardsController < Api::BaseController
     {
       number: card.number,
       title: card.title,
-      tags: card.tags.pluck(:name),
+      tags: card.tags.pluck(:title),
       assignees: card.assignees.map { |u| u.identity&.email_address || u.name }
     }
   end
