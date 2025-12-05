@@ -9,7 +9,7 @@ class Api::SearchController < Api::BaseController
     cards = current_user.accessible_cards
       .published
       .includes(:board, :column, :tags)
-      .where("title ILIKE :q OR description ILIKE :q", q: "%#{query}%")
+      .where("title LIKE :q", q: "%#{query}%")
       .limit(params[:limit]&.to_i || 20)
 
     results = cards.map do |c|
