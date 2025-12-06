@@ -25,19 +25,29 @@ class Api::CardsController < Api::BaseController
 
   def create
     board = current_user.boards.find(params[:board_id])
-    column = params[:column_id].present? ? board.columns.find(params[:column_id]) : nil
 
     card = board.cards.create!(
       creator: current_user,
       title: params[:title],
       description: params[:description],
-      status: "drafted"
+      status: "published"
     )
 
-    # If a column is specified, triage the card into it
-    card.triage_into(column) if column
+    # Handle column placement (virtual or real)
+    case params[:column]&.downcase
+    when "not_now", "not now"
+      card.postpone(user: current_user)
+    when "done"
+      card.close(user: current_user)
+    when "maybe", "maybe?", nil
+      # Already in "Maybe?" (awaiting triage) - no action needed
+    else
+      # Assume it's a real column ID
+      column = board.columns.find(params[:column])
+      card.triage_into(column)
+    end
 
-    render json: { number: card.number, title: card.title, status: card.status }, status: :created
+    render json: { number: card.number, title: card.title, status: card.status, column: params[:column] || "maybe" }, status: :created
   end
 
   def update
