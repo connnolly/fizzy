@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# Ensure storage directories exist for Active Storage
+mkdir -p /rails/storage/files
+
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/thrust" ] && [ "${2}" == "./bin/rails" ] && [ "${3}" == "server" ]; then
   MIGRATE=1 ./bin/rails db:prepare
