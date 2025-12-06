@@ -1,11 +1,14 @@
 #!/bin/bash -e
 
-# Ensure storage directories exist for Active Storage (may fail on volume mounts)
-mkdir -p /rails/storage/files 2>/dev/null || echo "Note: Could not create storage directories (may already exist in volume)"
+# Fix storage directory permissions (running as root)
+mkdir -p /rails/storage/files
+chown -R rails:rails /rails/storage
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/thrust" ] && [ "${2}" == "./bin/rails" ] && [ "${3}" == "server" ]; then
-  MIGRATE=1 ./bin/rails db:prepare
+  # Run db:prepare as rails user
+  gosu rails bash -c "MIGRATE=1 ./bin/rails db:prepare"
 fi
 
-exec "${@}"
+# Drop privileges and run the command as rails user
+exec gosu rails "$@"

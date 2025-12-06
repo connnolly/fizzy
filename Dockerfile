@@ -14,9 +14,9 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 # Rails app lives here
 WORKDIR /rails
 
-# Install base packages
+# Install base packages (including gosu for dropping privileges)
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 libssl-dev && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 libssl-dev gosu && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
@@ -66,12 +66,12 @@ ARG OCI_SOURCE
 LABEL org.opencontainers.image.source="${OCI_SOURCE}"
 LABEL org.opencontainers.image.licenses="O'Saasy"
 
-# Run and own only the runtime files as a non-root user for security
+# Create rails user for running the app (container starts as root for volume permission fixes)
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     mkdir -p /rails/storage/files && \
     chown -R rails:rails /rails/storage
-USER 1000:1000
+# Note: Not using USER here - entrypoint will fix volume permissions then drop to rails user
 
 # Copy built artifacts: gems, application
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
