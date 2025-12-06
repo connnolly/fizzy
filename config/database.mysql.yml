@@ -6,6 +6,7 @@ default: &default
   password: <%= ENV["MYSQL_PASSWORD"] %>
   pool: 50
   timeout: 5000
+  ssl_mode: preferred
 
 development:
   primary:
