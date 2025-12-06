@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-# Ensure storage directories exist for Active Storage
-mkdir -p /rails/storage/files
+# Ensure storage directories exist for Active Storage (may fail on volume mounts)
+mkdir -p /rails/storage/files 2>/dev/null || echo "Note: Could not create storage directories (may already exist in volume)"
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/thrust" ] && [ "${2}" == "./bin/rails" ] && [ "${3}" == "server" ]; then
