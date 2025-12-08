@@ -1,0 +1,9 @@
+[deploy]
+# Restart policy
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# Resource limits to control costs
+# 512MB should be plenty for 2 Puma workers
+# Adjust WEB_CONCURRENCY env var if you need more workers
+numReplicas = 1
